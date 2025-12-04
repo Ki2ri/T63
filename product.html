@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product | Game Haven</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo-container">
+        <img src="GAME HAVEN.svg" class="logo">
+        <h1 class="brand">Game Haven</h1>
+    </div>
+
+    <form class="search-bar" onsubmit="return searchProduct(event)">
+        <input id="searchBox" type="text" placeholder="Search products...">
+        <button type="submit">Search</button>
+    </form>
+
+    <nav>
+        <ul class="nav-links">
+            <li><a href="products.html">Back to Products</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="single-product">
+    <img id="product-image">
+
+    <div class="product-info">
+        <h2 id="product-name"></h2>
+        <p id="product-price" class="price"></p>
+        <p id="product-description" class="description"></p>
+        <button class="buy-btn">Add to Basket</button>
+    </div>
+</section>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+const products = {
+    ps5: {
+        name: "PlayStation 5",
+        price: "£479.99",
+        image: "PS5.png",
+        description: "The PS5 delivers ultra-fast SSD loading, ray tracing, smooth 4K gameplay and immersive haptic feedback."
+    },
+    ps5pro: {
+        name: "PlayStation 5 Pro",
+        price: "£699.99",
+        image: "PS5 PRO.png",
+        description: "The PS5 Pro boosts the PS5 with more GPU power, 4K/120FPS, better ray tracing and upgraded rendering."
+    },
+    xbox: {
+        name: "Xbox Series X",
+        price: "£449.99",
+        image: "Xbox X.png",
+        description: "The Xbox Series X features true 4K gaming, 120FPS support, faster loading and access to Xbox Game Pass."
+    },
+    xboxs: {
+        name: "Xbox Series S",
+        price: "£249.99",
+        image: "Xbox S.png",
+        description: "The Xbox Series S is a compact next-gen console offering smooth 1440p gameplay at an affordable price."
+    },
+    switch2: {
+        name: "Nintendo Switch 2",
+        price: "£329.99",
+        image: "Nintendo switch 2.png",
+        description: "The Switch 2 offers hybrid play, improved performance, longer battery life and a brighter display."
+    },
+    bo7: {
+        name: "Call of Duty: Black Ops 7",
+        price: "£69.99",
+        image: "BO7.png",
+        description: "Black Ops 7 brings tactical action, a dark Cold War story, and new multiplayer & zombies content."
+    },
+    fifa25: {
+        name: "EA Sports FC 25",
+        price: "£69.99",
+        image: "EA Sports FC 25.png",
+        description: "EA FC 25 delivers better animations, smarter AI and the largest roster of leagues and teams ever."
+    },
+    dbs: {
+        name: "Dragon Ball Sparking Zero",
+        price: "£59.99",
+        image: "DBS.png",
+        description: "Massive character roster, explosive 3D battles, destructible arenas and anime-accurate combat."
+    },
+    undisputed: {
+        name: "Undisputed Boxing",
+        price: "£49.99",
+        image: "Undisputed.png",
+        description: "Realistic boxing gameplay with licensed fighters, footwork controls and competitive online modes."
+    },
+    nfl: {
+        name: "Madden NFL 24",
+        price: "£59.99",
+        image: "NFL.png",
+        description: "American football with improved physics, better franchise mode and real NFL team rosters."
+    },
+    ps5controller: {
+        name: "PS5 DualSense Controller",
+        price: "£59.99",
+        image: "PS5con.png",
+        description: "Adaptive triggers, haptic feedback and a built-in microphone for next-gen immersion."
+    },
+    ps5merch: {
+        name: "PlayStation 5 Merchandise",
+        price: "£39.99",
+        image: "PS5Merch.png",
+        description: "Official PS5 clothing and accessories for true gaming fans."
+    },
+    pcgaming: {
+        name: "Gaming PC Tower",
+        price: "£999.99",
+        image: "PC.png",
+        description: "High-performance gaming PC with fast SSD storage, strong GPU and RGB lighting."
+    }
+};
+
+function searchProduct(event) {
+    event.preventDefault();
+
+    const search = document.getElementById("searchBox").value.toLowerCase();
+    const map = {
+        "ps5": "ps5",
+        "playstation 5": "ps5",
+        "ps5 pro": "ps5pro",
+        "playstation 5 pro": "ps5pro",
+        "xbox series x": "xbox",
+        "xbox x": "xbox",
+        "series x": "xbox",
+        "xbox series s": "xboxs",
+        "xbox s": "xboxs",
+        "series s": "xboxs",
+        "switch": "switch2",
+        "nintendo switch 2": "switch2",
+        "bo7": "bo7",
+        "black ops 7": "bo7",
+        "fc 25": "fifa25",
+        "ea fc 25": "fifa25",
+        "dragon ball": "dbs",
+        "sparking zero": "dbs",
+        "undisputed": "undisputed",
+        "nfl": "nfl",
+        "controller": "ps5controller",
+        "ps5 controller": "ps5controller",
+        "merch": "ps5merch",
+        "pc": "pcgaming",
+        "gaming pc": "pcgaming"
+    };
+
+    if (map[search]) {
+        window.location = `product.html?id=${map[search]}`;
+    } else {
+        alert("Product not found.");
+    }
+}
+
+const p = products[id];
+
+if (p) {
+    document.getElementById("product-name").innerText = p.name;
+    document.getElementById("product-price").innerText = p.price;
+    document.getElementById("product-description").innerText = p.description;
+    document.getElementById("product-image").src = p.image;
+} else {
+    document.querySelector(".single-product").innerHTML = "<h2>Product Not Found</h2>";
+}
+</script>
+
+</body>
+</html>
