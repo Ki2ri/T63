@@ -1,8 +1,12 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Game Haven | Products</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
 
@@ -13,6 +17,7 @@ body{
     font-family:Arial,Helvetica,sans-serif;
 }
 
+/* HEADER */
 header{
     background:#5E0766;
     border-bottom:4px solid #F5E9FF;
@@ -23,17 +28,28 @@ header{
     display:flex;
     justify-content:space-between;
     align-items:center;
+    width:95%;
+    margin:auto;
 }
 
 .logo{
     display:flex;
     align-items:center;
+    gap:10px;
+    font-weight:bold;
+    font-size:20px;
 }
 
 .logo img{
     width:55px;
     height:55px;
-    margin-right:10px;
+}
+
+/* SEARCH */
+.search-bar{
+    display:flex;
+    align-items:center;
+    gap:8px;
 }
 
 .search-bar input{
@@ -53,12 +69,34 @@ header{
     font-weight:bold;
 }
 
+/* ICON BUTTONS */
+.icon-btn{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 14px;
+    border:2px solid #F5E9FF;
+    background:none;
+    color:#F5E9FF;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+.account-icons{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+/* NAVIGATION */
 nav{
     display:flex;
-    gap:25px;
     justify-content:center;
+    gap:40px;
     background:#5E0766;
-    padding:12px 25px;
+    padding:12px 0;
 }
 
 nav a{
@@ -67,6 +105,7 @@ nav a{
     font-weight:bold;
 }
 
+/* FILTERS */
 .filter-buttons{
     text-align:center;
     padding:20px;
@@ -83,6 +122,7 @@ nav a{
     border-radius:6px;
 }
 
+/* PRODUCT GRID */
 .products{
     display:flex;
     gap:25px;
@@ -117,9 +157,7 @@ nav a{
     margin-top:8px;
 }
 
-.hidden{
-    display:none;
-}
+.hidden{display:none;}
 
 </style>
 </head>
@@ -127,14 +165,35 @@ nav a{
 
 <header>
     <div class="nav-container">
+
         <div class="logo">
-            <img src="images/logo.png" alt="Game Haven">
+            <img src="gamehavenlogo.png" alt="Logo">
+            <span>GAME HAVEN</span>
         </div>
 
         <div class="search-bar">
-            <input type="text" placeholder="Search...">
-            <button>Go</button>
+            <input id="searchInput" type="text" placeholder="Search products...">
+            <button onclick="window.location='products.php'">Go</button>
         </div>
+
+        <div class="account-icons">
+
+            <?php if(isset($_SESSION["user_id"])): ?>
+                <span>Welcome, <?= htmlspecialchars($_SESSION["user_name"]) ?></span>
+                <a href="logout.php" class="icon-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            <?php else: ?>
+                <a href="login.php" class="icon-btn"><i class="fa-solid fa-user"></i> Login</a>
+            <?php endif; ?>
+
+            <a href="Basket.php" class="icon-btn">
+                <i class="fa-solid fa-basket-shopping"></i>
+            </a>
+
+            <button id="toggle" class="icon-btn">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </div>
+
     </div>
 </header>
 
@@ -144,7 +203,6 @@ nav a{
     <a href="About-Us.php">ABOUT US</a>
     <a href="contact.php">CONTACT US</a>
 </nav>
-
 
 <div class="filter-buttons">
     <button onclick="filter('all')">Show All</button>
@@ -192,7 +250,6 @@ nav a{
         <a href="product.php?id=switch2">View Product</a>
     </div>
 
-
     <div class="card game">
         <img src="images/BO7.png">
         <h3>Call of Duty BO7</h3>
@@ -214,7 +271,6 @@ nav a{
         <a href="product.php?id=nfl">View Product</a>
     </div>
 
-
     <div class="card accessory">
         <img src="images/PS5con.png">
         <h3>PS5 Controller</h3>
@@ -224,7 +280,7 @@ nav a{
 
     <div class="card merch">
         <img src="images/PS5Merch.png">
-        <h3>PS Mug</h3>
+        <h3>PS5 Mug</h3>
         <p>£19.99</p>
         <a href="product.php?id=ps5merch">View Product</a>
     </div>
@@ -241,8 +297,8 @@ nav a{
 <script>
 
 function filter(type){
-    let items=document.querySelectorAll(".card");
-    items.forEach(card=>{
+    let cards=document.querySelectorAll(".card");
+    cards.forEach(card=>{
         card.classList.remove("hidden");
         if(type!=="all" && !card.classList.contains(type)){
             card.classList.add("hidden");
