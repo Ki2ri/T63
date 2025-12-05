@@ -1,3 +1,8 @@
+<?php
+session_start();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,50 +16,67 @@
 </head>
 <body>
 
+
 <header>
     <div class="nav-container">
 
-      
         <div class="logo">
-            <img src="GAME HAVEN.svg"    height="50px" width="50px"  alt="Game Haven Logo">
+         <a href="index.php">
+            <img src="gamehavenlogo.png" height="50px" width="50px" alt="Game Haven Logo">
+             </a>
             <span>GAME HAVEN</span>
         </div>
 
         <div class="search-bar">
-    <input id="searchInput" type="text" placeholder="Search...">
-    <a href="products.html"><button>Go</button></a>
-</div>
+            <input id="searchInput" type="text" placeholder="Search...">
+            <a href="products.html"><button>Go</button></a>
+        </div>
+
+        <button id="toggle" class="icon-btn">
+            <i class="fa-solid fa-moon"></i>
+        </button>
+
+        <div class="account-icons">
+
+            <?php if (isset($_SESSION["user_id"])): ?>
+                
+                <!-- Show welcome text -->
+                <span class="welcome-text">Welcome, <?= htmlspecialchars($_SESSION["user_name"]); ?></span>
+
+                <!-- Logout button -->
+                <a href="logout.php" class="icon-btn">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+
+            <?php else: ?>
 
            
-        <button id="toggle" class="icon-btn">
-    <i class="fa-solid fa-moon"></i>
-</button>
-     
-        <div class="account-icons">
-            <a href="login.html" class="icon-btn">
-                <i class="fa-solid fa-user"></i> Login
-            </a>
+                <a href="login.php" class="icon-btn">
+                    <i class="fa-solid fa-user"></i> Login
+                </a>
+
+            <?php endif; ?>
+
             <a href="Basket.html" class="icon-btn">
                 <i class="fa-solid fa-basket-shopping"></i>
             </a>
+
         </div>
 
-  
-        
     </div>
 </header>
 <nav>
-            <a href="index(1).html">HOME</a>
-             <a href="products.html">PRODUCTS</a>
+            <a href="index.php">HOME</a>
+             <a href="product.html">PRODUCTS</a>
             <a href="About-Us.html" class="active">ABOUT</a>
-            <a href="contact.html">CONTACT</a>
+            <a href="contact.php">CONTACT</a>
         </nav>
 
 <section class="about-section">
     <h2>Our Mission</h2>
     <img src="PS5PRO.png" height="200px" width="200px">
     <img src="Familygaming.png" height="200px" width="200px">
-    <img src="Epedition33.png" height="200px" width="200px">
+    <img src="Expedition33.png" height="200px" width="200px">
     <p>
         GameHaven’s mission is to empower gamers of all levels by providing easy access to high-quality gaming technology and reliable advice. We strive to create a seamless shopping experience that combines clear navigation, detailed product information, and personalized content, helping customers make informed choices. Our goal is to be more than just a store—we aim to be a trusted companion for the gaming community, offering the latest gear, expert guidance, and a platform that evolves with the needs of today’s gamers.
     </p>
