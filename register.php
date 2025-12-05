@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <nav>
     <a href="index.php">HOME</a>
-    <a href="product.html">PRODUCTS</a>
+    <a href="product.php">PRODUCTS</a>
     <a href="About-Us.php">ABOUT</a>
     <a href="contact.php">CONTACT</a>
 </nav>
