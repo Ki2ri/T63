@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION["user_id"] = $user["id"];
         $_SESSION["user_name"] = $user["full_name"];
 
-        echo "<script>alert('Login successful!'); window.location='About-Us.php';</script>";
+        echo "<script>alert('Login successful!'); window.location='homepage.php';</script>";
         exit();
 
     } else {
@@ -45,8 +45,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <header>
     <div class="nav-container">
 
-        <div class="logo">
+         <div class="logo">
+         <a href="index.php">
             <img src="gamehavenlogo.png" height="50px" width="50px" alt="Game Haven Logo">
+             </a>
             <span>GAME HAVEN</span>
         </div>
 
@@ -54,7 +56,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input id="searchInput" type="text" placeholder="Search...">
             <a href="products.html"><button>Go</button></a>
         </div>
-
+           
+        <button id="toggle" class="icon-btn">
+            <i class="fa-solid fa-moon"></i>
+        </button>
         <div class="account-icons">
 
             <?php if (isset($_SESSION["user_id"])): ?>
@@ -91,8 +96,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <nav>
           
           
-            <a href="index.php">HOME</a>
-             <a href="product.php">PRODUCTS</a>
+            <a href="homepage.php">HOME</a>
+             <a href="products.php">PRODUCTS</a>
             <a href="About-Us.php">ABOUT</a>
             <a href="contact.php">CONTACT</a>
         
@@ -161,3 +166,4 @@ toggleBtn.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
