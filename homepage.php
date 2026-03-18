@@ -202,6 +202,7 @@ footer{
     color:#32043A;
 }
 </style>
+    <link rel="stylesheet" href="chatbot.css">
 </head>
 <body>
 
@@ -321,6 +322,6 @@ toggleBtn.addEventListener("click",()=>{
     }
 });
 </script>
-
+    <script src="chatbot.js"></script>
 </body>
 </html>
