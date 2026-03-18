@@ -44,6 +44,8 @@ $categories = $catStmt->fetchAll();
         .search-bar { margin-bottom: 20px; padding: 15px; background: #f4f4f4; border-radius: 8px; }
         input, select, button { padding: 8px; margin-right: 10px; }
     </style>
+<link rel="stylesheet" href="chatbot.css">
+
 </head>
 <body>
 
@@ -87,6 +89,6 @@ $categories = $catStmt->fetchAll();
             <p>No products found.</p>
         <?php endif; ?>
     </div>
-
+    <script src="chatbot.js"></script>
 </body>
 </html>
