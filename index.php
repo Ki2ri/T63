@@ -47,8 +47,9 @@ $categories = $catStmt->fetchAll();
 <link rel="stylesheet" href="chatbot.css">
 
 </head>
+        <link rel="stylesheet" href="chatbot.css">
 <body>
-
+        <script src="chatbot.js"></script>
     <h1>Game Haven Catalogue</h1>
 
     <div class="search-bar">
