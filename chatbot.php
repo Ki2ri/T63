@@ -1,100 +1,149 @@
 <?php
 session_start();
-header('Content-Type: application/json');
+require_once "db.php"; 
 
-require_once 'db.php';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-$input = json_decode(file_get_contents("php://input"), true);
-$message = trim(strtolower($input['message'] ?? ''));
+    $email = $_POST["email"];
+    $password = $_POST["password"];
 
-if ($message === '') {
-    echo json_encode(['reply' => 'Please type a message.']);
-    exit;
-}
+    $stmt = $pdo->prepare("SELECT id, full_name, password FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch();
 
-function reply($text) {
-    echo json_encode(['reply' => $text]);
-    exit;
-}
+    if ($user && password_verify($password, $user['password'])) {
 
-if (strpos($message, 'hello') !== false || strpos($message, 'hi') !== false) {
-    reply("Hi, welcome to Game Haven. I can help you find products, prices, basket info, and checkout help.");
-}
+        $_SESSION["user_id"] = $user["id"];
+        $_SESSION["user_name"] = $user["full_name"];
 
-if (strpos($message, 'checkout') !== false || strpos($message, 'pay') !== false) {
-    reply("To checkout, add products to your basket and then go to the basket page and click Proceed to Checkout.");
-}
+        echo "<script>alert('Login successful!'); window.location='homepage.php';</script>";
+        exit();
 
-if (strpos($message, 'contact') !== false) {
-    reply("You can contact us through the Contact Us page on the website.");
-}
-
-if (strpos($message, 'basket') !== false && isset($_SESSION['basket'])) {
-    $count = array_sum($_SESSION['basket']);
-    reply("You currently have {$count} item(s) in your basket.");
-}
-
-if (strpos($message, 'basket') !== false) {
-    reply("Your basket is currently empty.");
-}
-
-try {
-    $stmt = $pdo->query("SELECT id, name, price, category FROM products");
-    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-    $products = [];
-}
-
-$matches = [];
-
-foreach ($products as $product) {
-    $name = strtolower($product['name']);
-    $category = strtolower($product['category'] ?? '');
-
-    if (strpos($message, $name) !== false || ($category && strpos($message, $category) !== false)) {
-        $matches[] = $product;
+    } else {
+        echo "<script>alert('Incorrect email or password');</script>";
     }
 }
-
-if (!empty($matches)) {
-    $response = "Here’s what I found:\n";
-    foreach (array_slice($matches, 0, 5) as $item) {
-        $response .= "- " . $item['name'] . " for £" . number_format((float)$item['price'], 2) . "\n";
-    }
-    reply(trim($response));
-}
-
-$keywords = [
-    'ps5' => '%ps5%',
-    'playstation' => '%playstation%',
-    'xbox' => '%xbox%',
-    'switch' => '%switch%',
-    'pc' => '%pc%',
-    'controller' => '%controller%',
-    'mug' => '%mug%',
-    'fifa' => '%fc%',
-    'call of duty' => '%call of duty%',
-    'madden' => '%madden%'
-];
-
-foreach ($keywords as $key => $like) {
-    if (strpos($message, $key) !== false) {
-        try {
-            $stmt = $pdo->prepare("SELECT id, name, price FROM products WHERE name LIKE ? LIMIT 5");
-            $stmt->execute([$like]);
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            if ($results) {
-                $response = "I found these products:\n";
-                foreach ($results as $item) {
-                    $response .= "- " . $item['name'] . " for £" . number_format((float)$item['price'], 2) . "\n";
-                }
-                reply(trim($response));
-            }
-        } catch (Exception $e) {
-        }
-    }
-}
-
-reply("I can help with products, prices, checkout, contact details, and basket questions. Try asking, for example, 'Show me PS5 products' or 'How do I checkout?'");
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game Haven - Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="chatbot.css">
+</head>
+
+<body>
+
+<header>
+    <div class="nav-container">
+
+        <div class="logo">
+            <a href="index.php">
+                <img src="gamehavenlogo.png" height="50px" width="50px" alt="Game Haven Logo">
+            </a>
+            <span>GAME HAVEN</span>
+        </div>
+
+        <div class="search-bar">
+            <input id="searchInput" type="text" placeholder="Search...">
+            <a href="products.html"><button>Go</button></a>
+        </div>
+           
+        <button id="toggle" class="icon-btn">
+            <i class="fa-solid fa-moon"></i>
+        </button>
+
+        <div class="account-icons">
+
+            <?php if (isset($_SESSION["user_id"])): ?>
+
+                <span class="welcome-text">Welcome, <?= htmlspecialchars($_SESSION["user_name"]); ?></span>
+
+                <a href="logout.php" class="icon-btn">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+
+            <?php else: ?>
+
+                <a href="login.php" class="icon-btn">
+                    <i class="fa-solid fa-user"></i> Login
+                </a>
+
+            <?php endif; ?>
+
+            <a href="Basket.php" class="icon-btn">
+                <i class="fa-solid fa-basket-shopping"></i>
+            </a>
+
+        </div>
+
+    </div>
+</header>
+
+<nav>
+    <a href="homepage.php">HOME</a>
+    <a href="products.php">PRODUCTS</a>
+    <a href="About-Us.php">ABOUT</a>
+    <a href="contact.php">CONTACT</a>
+</nav>
+
+<div class="form-container">
+    <h2>LOGIN</h2>
+
+    <form action="login.php" method="POST">
+
+        <label>Email</label>
+        <input type="email" name="email" placeholder="Enter email" class="form-input" required>
+
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Enter password" class="form-input" required>
+
+        <div class="remember-me">
+            <input type="checkbox" id="remember">
+            <label for="remember">Remember Me</label>
+        </div>
+
+        <button type="submit" class="submit-btn">Log In</button>
+
+        <a href="#" class="forgot">Forgot Password?</a>
+
+        <p class="register-text">
+            Don’t have an account? <a href="register.php">Register here</a>
+        </p>
+
+    </form>
+</div>
+
+<script>
+function toggleDetails(header) {
+    const content = header.nextElementSibling;
+    content.classList.toggle('show');
+}
+
+const toggleBtn = document.getElementById("toggle");
+
+if (localStorage.getItem("theme") === "light") {
+    document.body.classList.add("light-mode");
+    toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+}
+
+toggleBtn.addEventListener("click", () => {
+    document.body.classList.toggle("light-mode");
+
+    if (document.body.classList.contains("light-mode")) {
+        toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        localStorage.setItem("theme", "light");
+    } 
+    else {
+        toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        localStorage.setItem("theme", "dark");
+    }
+});
+</script>
+
+<script src="chatbot.js"></script>
+</body>
+</html>
