@@ -58,9 +58,10 @@ nav a{text-decoration:none;color:#F5E9FF;font-weight:bold}
 .light-mode nav,.light-mode header{background:#E6E6E6;border-color:black}
 .light-mode .box{background:white;border-color:black;color:black}
 </style>
+
+<link rel="stylesheet" href="chatbot.css">
 </head>
 <body>
-
 <header>
     <div class="nav-container">
         <div class="logo">
@@ -115,5 +116,6 @@ if(document.body.classList.contains("light-mode")){toggleBtn.innerHTML='<i class
 else{toggleBtn.innerHTML='<i class="fa-solid fa-moon"></i>';localStorage.setItem("theme","dark")}})
 </script>
 
+<script src="chatbot.js"></script>
 </body>
 </html>
