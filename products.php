@@ -160,6 +160,8 @@ nav a{
 .hidden{display:none;}
 
 </style>
+
+<link rel="stylesheet" href="chatbot.css">
 </head>
 <body>
 
@@ -308,5 +310,6 @@ function filter(type){
 
 </script>
 
+<script src="chatbot.js"></script>
 </body>
 </html>
